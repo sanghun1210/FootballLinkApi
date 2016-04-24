@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FootBallLinkApi2Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Clubs">
+    <Key>
+      <PropertyRef Name="ClubId" />
+    </Key>
+    <Property Name="ClubId" Type="Int32" Nullable="false" />
+    <Property Name="ClubRank" Type="Int32" />
+    <Property Name="ClubName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ClothingID" Type="Int32" />
+    <Property Name="ClubDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MatchCount" Type="Int32" />
+    <Property Name="WinCount" Type="Int32" />
+    <Property Name="DrawCount" Type="Int32" />
+    <Property Name="LoseCount" Type="Int32" />
+    <Property Name="Points" Type="Int32" />
+    <NavigationProperty Name="Matches" Relationship="Self.FK__Matches__AwayClu__398D8EEE" FromRole="Clubs" ToRole="Matches" />
+    <NavigationProperty Name="Matches1" Relationship="Self.FK__Matches__HomeClu__38996AB5" FromRole="Clubs" ToRole="Matches" />
+  </EntityType>
+  <EntityType Name="Matches">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="MatchDate" Type="DateTime" Precision="3" />
+    <Property Name="HomeClubId" Type="Int32" />
+    <Property Name="AwayClubId" Type="Int32" />
+    <Property Name="HomeScore" Type="Int32" />
+    <Property Name="AwayScore" Type="Int32" />
+    <NavigationProperty Name="Clubs" Relationship="Self.FK__Matches__AwayClu__398D8EEE" FromRole="Matches" ToRole="Clubs" />
+    <NavigationProperty Name="Clubs1" Relationship="Self.FK__Matches__HomeClu__38996AB5" FromRole="Matches" ToRole="Clubs" />
+  </EntityType>
+  <Association Name="FK__Matches__AwayClu__398D8EEE">
+    <End Role="Clubs" Type="Self.Clubs" Multiplicity="0..1" />
+    <End Role="Matches" Type="Self.Matches" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Clubs">
+        <PropertyRef Name="ClubId" />
+      </Principal>
+      <Dependent Role="Matches">
+        <PropertyRef Name="AwayClubId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Matches__HomeClu__38996AB5">
+    <End Role="Clubs" Type="Self.Clubs" Multiplicity="0..1" />
+    <End Role="Matches" Type="Self.Matches" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Clubs">
+        <PropertyRef Name="ClubId" />
+      </Principal>
+      <Dependent Role="Matches">
+        <PropertyRef Name="HomeClubId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="FootBallLinkApi2EntitiesTest" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Clubs" EntityType="Self.Clubs" />
+    <EntitySet Name="Matches" EntityType="Self.Matches" />
+    <AssociationSet Name="FK__Matches__AwayClu__398D8EEE" Association="Self.FK__Matches__AwayClu__398D8EEE">
+      <End Role="Clubs" EntitySet="Clubs" />
+      <End Role="Matches" EntitySet="Matches" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Matches__HomeClu__38996AB5" Association="Self.FK__Matches__HomeClu__38996AB5">
+      <End Role="Clubs" EntitySet="Clubs" />
+      <End Role="Matches" EntitySet="Matches" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

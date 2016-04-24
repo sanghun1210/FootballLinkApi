@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FootBallLinkApiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Club">
+          <Key>
+            <PropertyRef Name="ClubId" />
+          </Key>
+          <Property Name="ClubId" Type="int" Nullable="false" />
+          <Property Name="ClubRank" Type="int" />
+          <Property Name="ClubName" Type="varchar" MaxLength="50" />
+          <Property Name="ClothingID" Type="int" />
+          <Property Name="ClubDescription" Type="varchar" MaxLength="50" />
+          <Property Name="MatchCount" Type="int" />
+          <Property Name="WinCount" Type="int" />
+          <Property Name="DrawCount" Type="int" />
+          <Property Name="LoseCount" Type="int" />
+          <Property Name="Points" Type="int" />
+        </EntityType>
+        <!--생성 중 오류 발생:
+경고 6002: 테이블/뷰 'FootBallLinkApi2.dbo.League'에 기본 키가 정의되지 않았습니다. 키가 유추되었고 읽기 전용 테이블/뷰로 정의되었습니다.-->
+        <EntityType Name="League">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Match">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="MatchDate" Type="datetime" />
+          <Property Name="HomeClubId" Type="int" />
+          <Property Name="AwayClubId" Type="int" />
+          <Property Name="HomeScore" Type="int" />
+          <Property Name="AwayScore" Type="int" />
+        </EntityType>
+        <Association Name="FK__Matches__AwayClu__398D8EEE">
+          <End Role="Club" Type="Self.Club" Multiplicity="0..1" />
+          <End Role="Match" Type="Self.Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Club">
+              <PropertyRef Name="ClubId" />
+            </Principal>
+            <Dependent Role="Match">
+              <PropertyRef Name="AwayClubId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Matches__HomeClu__38996AB5">
+          <End Role="Club" Type="Self.Club" Multiplicity="0..1" />
+          <End Role="Match" Type="Self.Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Club">
+              <PropertyRef Name="ClubId" />
+            </Principal>
+            <Dependent Role="Match">
+              <PropertyRef Name="HomeClubId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FootBallLinkApiModelStoreContainer">
+          <EntitySet Name="Club" EntityType="Self.Club" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Match" EntityType="Self.Match" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="League" EntityType="Self.League" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [League].[Id] AS [Id], 
+    [League].[Name] AS [Name]
+    FROM [dbo].[League] AS [League]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__Matches__AwayClu__398D8EEE" Association="Self.FK__Matches__AwayClu__398D8EEE">
+            <End Role="Club" EntitySet="Club" />
+            <End Role="Match" EntitySet="Match" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Matches__HomeClu__38996AB5" Association="Self.FK__Matches__HomeClu__38996AB5">
+            <End Role="Club" EntitySet="Club" />
+            <End Role="Match" EntitySet="Match" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FootBallLinkApiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Club">
+          <Key>
+            <PropertyRef Name="ClubId" />
+          </Key>
+          <Property Name="ClubId" Type="Int32" Nullable="false" />
+          <Property Name="ClubRank" Type="Int32" />
+          <Property Name="ClubName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClothingID" Type="Int32" />
+          <Property Name="ClubDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MatchCount" Type="Int32" />
+          <Property Name="WinCount" Type="Int32" />
+          <Property Name="DrawCount" Type="Int32" />
+          <Property Name="LoseCount" Type="Int32" />
+          <Property Name="Points" Type="Int32" />
+          <NavigationProperty Name="Match" Relationship="Self.FK__Matches__AwayClu__398D8EEE" FromRole="Club" ToRole="Match" />
+          <NavigationProperty Name="Match1" Relationship="Self.FK__Matches__HomeClu__38996AB5" FromRole="Club" ToRole="Match" />
+        </EntityType>
+        <EntityType Name="Match">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="MatchDate" Type="DateTime" Precision="3" />
+          <Property Name="HomeClubId" Type="Int32" />
+          <Property Name="AwayClubId" Type="Int32" />
+          <Property Name="HomeScore" Type="Int32" />
+          <Property Name="AwayScore" Type="Int32" />
+          <NavigationProperty Name="Club" Relationship="Self.FK__Matches__AwayClu__398D8EEE" FromRole="Match" ToRole="Club" />
+          <NavigationProperty Name="Club1" Relationship="Self.FK__Matches__HomeClu__38996AB5" FromRole="Match" ToRole="Club" />
+        </EntityType>
+        <EntityType Name="League">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK__Matches__AwayClu__398D8EEE">
+          <End Role="Club" Type="Self.Club" Multiplicity="0..1" />
+          <End Role="Match" Type="Self.Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Club">
+              <PropertyRef Name="ClubId" />
+            </Principal>
+            <Dependent Role="Match">
+              <PropertyRef Name="AwayClubId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Matches__HomeClu__38996AB5">
+          <End Role="Club" Type="Self.Club" Multiplicity="0..1" />
+          <End Role="Match" Type="Self.Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Club">
+              <PropertyRef Name="ClubId" />
+            </Principal>
+            <Dependent Role="Match">
+              <PropertyRef Name="HomeClubId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FootBallLinkApiEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Club" EntityType="Self.Club" />
+          <EntitySet Name="Match" EntityType="Self.Match" />
+          <EntitySet Name="League" EntityType="Self.League" />
+          <AssociationSet Name="FK__Matches__AwayClu__398D8EEE" Association="Self.FK__Matches__AwayClu__398D8EEE">
+            <End Role="Club" EntitySet="Club" />
+            <End Role="Match" EntitySet="Match" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Matches__HomeClu__38996AB5" Association="Self.FK__Matches__HomeClu__38996AB5">
+            <End Role="Club" EntitySet="Club" />
+            <End Role="Match" EntitySet="Match" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FootBallLinkApiModelStoreContainer" CdmEntityContainer="FootBallLinkApiEntities">
+          <EntitySetMapping Name="Club">
+            <EntityTypeMapping TypeName="FootBallLinkApiModel.Club">
+              <MappingFragment StoreEntitySet="Club">
+                <ScalarProperty Name="ClubId" ColumnName="ClubId" />
+                <ScalarProperty Name="ClubRank" ColumnName="ClubRank" />
+                <ScalarProperty Name="ClubName" ColumnName="ClubName" />
+                <ScalarProperty Name="ClothingID" ColumnName="ClothingID" />
+                <ScalarProperty Name="ClubDescription" ColumnName="ClubDescription" />
+                <ScalarProperty Name="MatchCount" ColumnName="MatchCount" />
+                <ScalarProperty Name="WinCount" ColumnName="WinCount" />
+                <ScalarProperty Name="DrawCount" ColumnName="DrawCount" />
+                <ScalarProperty Name="LoseCount" ColumnName="LoseCount" />
+                <ScalarProperty Name="Points" ColumnName="Points" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Match">
+            <EntityTypeMapping TypeName="FootBallLinkApiModel.Match">
+              <MappingFragment StoreEntitySet="Match">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MatchDate" ColumnName="MatchDate" />
+                <ScalarProperty Name="HomeClubId" ColumnName="HomeClubId" />
+                <ScalarProperty Name="AwayClubId" ColumnName="AwayClubId" />
+                <ScalarProperty Name="HomeScore" ColumnName="HomeScore" />
+                <ScalarProperty Name="AwayScore" ColumnName="AwayScore" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="League">
+            <EntityTypeMapping TypeName="FootBallLinkApiModel.League">
+              <MappingFragment StoreEntitySet="League">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="없음" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
